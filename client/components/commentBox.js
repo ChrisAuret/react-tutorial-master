@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from'axios';
 import CommentList from './commentList';
-import CommentForm from './commentForm';
+import CommentFormContainer from '../containers/commentFormContainer';
 
 class CommentBox extends Component {
 
@@ -10,7 +10,7 @@ class CommentBox extends Component {
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.props.data} />
-        <CommentForm onCommentSubmit={this.props.handleCommentSubmit} />
+        <CommentFormContainer onCommentSubmit={this.props.handleCommentSubmit} />
       </div>
     );
   }

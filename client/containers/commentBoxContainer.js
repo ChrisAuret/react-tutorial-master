@@ -21,9 +21,6 @@ class CommentBoxContainer extends Component {
   }
 
   handleCommentSubmit  (comment) {
-    
-    console.log(this.state);
-
     var comments = this.state.data;
 
     comment.id = Date.now();
