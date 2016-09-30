@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import CommentBox from './components/commentBox';
+import CommentBoxContainer from './containers/CommentBoxContainer';
 
 ReactDOM.render(
-    <CommentBox url="http://localhost:3000/api/comments" pollInterval={2000} />,
+    <CommentBoxContainer url="http://localhost:3000/api/comments" pollInterval={2000} />,
     document.getElementById('container')
 );
