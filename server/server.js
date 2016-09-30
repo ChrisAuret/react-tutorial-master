@@ -15,10 +15,12 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var cors = require('cors');
 
 var COMMENTS_FILE = path.join(__dirname, 'comments.json');
 
 app.set('port', (process.env.PORT || 3000));
+app.use(cors());
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
@@ -36,6 +38,9 @@ app.use(function(req, res, next) {
 });
 
 app.get('/api/comments', function(req, res) {
+  
+  console.log("get : ");
+  
   fs.readFile(COMMENTS_FILE, function(err, data) {
     if (err) {
       console.error(err);
@@ -46,6 +51,7 @@ app.get('/api/comments', function(req, res) {
 });
 
 app.post('/api/comments', function(req, res) {
+
   fs.readFile(COMMENTS_FILE, function(err, data) {
     if (err) {
       console.error(err);
@@ -57,15 +63,19 @@ app.post('/api/comments', function(req, res) {
     // treat Date.now() as unique-enough for our purposes.
     var newComment = {
       id: Date.now(),
-      author: req.body.author,
-      text: req.body.text,
+      author: req.body.data.author,
+      text: req.body.data.text,
     };
+
+    console.log(newComment);
+
     comments.push(newComment);
     fs.writeFile(COMMENTS_FILE, JSON.stringify(comments, null, 4), function(err) {
       if (err) {
         console.error(err);
         process.exit(1);
       }
+
       res.json(comments);
     });
   });

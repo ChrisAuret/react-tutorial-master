@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from'axios';
 import CommentList from './commentList';
 import CommentForm from './commentForm';
 
@@ -9,20 +10,17 @@ class CommentBox extends Component {
     this.state = {
       data: []
     };
+
   }
 
   loadCommentsFromServer() {
-    $.ajax({
-      url: this.props.url,
-      datatype: 'json',
-      cache: false, 
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err){
-        console.log(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    axios.get(this.props.url)
+      .then( response => {
+        this.setState({ data: response.data});
+      })
+      .catch(error => {
+        console.log(this.props.url, error);
+      });
   }
 
   handleCommentSubmit (comment) {
@@ -34,23 +32,18 @@ class CommentBox extends Component {
     var newComments = comments.concat([comment]);
     this.setState({date: newComments});
 
-    $.ajax({
-      url: this.props.url,
-      dataType: 'json',
-      type: 'POST',
-      data: comment,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err){
-        console.log(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    axios.post(this.props.url, { data: comment })
+      .then(response => {
+        this.setState({data: response.data});
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
   
   componentDidMount () {
     this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer.bind(this), this.props.pollInterval);
+    //setInterval(this.loadCommentsFromServer.bind(this), this.props.pollInterval);
   }
 
   render() {
